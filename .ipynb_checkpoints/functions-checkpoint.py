@@ -1,5 +1,7 @@
 from scipy.signal import find_peaks
 import numpy as np
+import matplotlib.pyplot as plt
+from avalanches_functions import *
 def findpeaks(sig, thres, choose, dist = 10):
     """
     Finds peaks in a time series.
@@ -48,7 +50,7 @@ def RasterPlot(spikes,ax, conv):
         x = times[idx[:,l]]
         ax.scatter(x*conv, [l for i in range(len(x))], marker ='s', c = 'black',s = 2.)
         
-def RasterPlot2(sample, av, fs = 500,ax = None, av_color = 'gray',
+def RasterPlot2(sample2, av, fs = 500,ax = None, av_color = 'gray',
                nsize = 1.5, alpha = 0.3):
     """
     Parameters
@@ -62,28 +64,30 @@ def RasterPlot2(sample, av, fs = 500,ax = None, av_color = 'gray',
     if ax == None:
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)
+    s,sample = returnbin(np.sum(sample2,1),av)
 
-    s = returnbin(np.sum(sample,1),av)
-    #print(np.array(s).shape, final_t.shape)
     if s[0] == 1:
         start_av = True
     else:
         start_av = False
     #print(np.where(np.diff(s) != 0)[0].shape)
-    xtime = np.arange(0,len(sample),1)/fs
+    xtime = np.arange(0,len(sample2),1)/fs
+    print(len(xtime), len(sample2))
     print(xtime[-1])
-    #print(xtime.shape), print(len(s))
-    s = xtime[(np.where(np.diff(s) != 0)[0]+1)]
-    print(s[-1])
+    s = xtime[(np.where(np.diff(s) != 0)[0]+1)*av]
+    #rint(s[-1])
     if start_av:
         s = np.concatenate([[0], s])
+        
+    print(s.size)
     if s.size % 2 != 0:
         s = np.concatenate([s, [xtime[-1]]])
     print(s.shape)
     for sval in s.reshape(-1, 2):
         ax.axvspan(sval[0], sval[1], 0.01, 0.99, color = av_color, alpha = alpha)
-    for j in range(sample.shape[1]):
-        idx = np.where(sample[:,j]> 0)[0]
+    for j in range(sample2.shape[1]):
+        print(j)
+        idx = np.where(sample2[:,j]> 0)[0]
         ax.plot(xtime[idx], np.ones(len(idx))*j, '|', color = 'black', markersize = nsize)
 
 def compute_density(data, mean_interspike_time, coef, 
