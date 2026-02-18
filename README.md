@@ -12,7 +12,7 @@ scipy==1.10.0
 matplotlib==3.7.2
 statsmodels==0.14.0
 powerlaw==1.5
-emd-signal==0.5.5
+emd==0.5.5
 pandas==2.0.3
 ```
 ![Model](figs/Model.jpg)
