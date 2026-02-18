@@ -1,5 +1,8 @@
 from scipy.signal import find_peaks
 import numpy as np
+import sys
+sys.path.append("Modules")
+
 import matplotlib.pyplot as plt
 from avalanches_functions import *
 def findpeaks(sig, thres, choose, dist = 10):
@@ -39,11 +42,11 @@ def Thres(coef,x):
     """
     return coef*np.median(np.abs(x)/0.6745)
 
-def RasterPlot(spikes,ax, conv):
-    #print(spikes.shape)
+def RasterPlot(spikes, conv, ax = None):
+    if ax == None:
+        fig = plt.figure()
+        ax = fig.add_subplot(1,1,1)
     idx = spikes > 0
-    #print(idx)
-    #print(idx.shape)
     times = np.arange(0,len(spikes),1)
     #print(times.shape)
     for l in range(spikes.shape[1]):
@@ -72,21 +75,17 @@ def RasterPlot2(sample2, av, fs = 500,ax = None, av_color = 'gray',
         start_av = False
     #print(np.where(np.diff(s) != 0)[0].shape)
     xtime = np.arange(0,len(sample2),1)/fs
-    print(len(xtime), len(sample2))
-    print(xtime[-1])
     s = xtime[(np.where(np.diff(s) != 0)[0]+1)*av]
     #rint(s[-1])
     if start_av:
         s = np.concatenate([[0], s])
         
-    print(s.size)
+    #print(s.size)
     if s.size % 2 != 0:
         s = np.concatenate([s, [xtime[-1]]])
-    print(s.shape)
     for sval in s.reshape(-1, 2):
         ax.axvspan(sval[0], sval[1], 0.01, 0.99, color = av_color, alpha = alpha)
     for j in range(sample2.shape[1]):
-        print(j)
         idx = np.where(sample2[:,j]> 0)[0]
         ax.plot(xtime[idx], np.ones(len(idx))*j, '|', color = 'black', markersize = nsize)
 
@@ -108,9 +107,9 @@ def compute_fr(data, mean_interspike_time, coef, ):
         density[g] = np.sum(ev[g:g+T])/T
     return density
     
-def concatenat_spikes(array,idx1,idx2, rep):
-    g = array[0,:,25000*idx1:25000*idx2]
+def concatenat_spikes(array,idx1,idx2, rep,fs):
+    g = array[0,:,fs*idx1:fs*idx2]
     for h in range(rep):
-        g = np.concatenate((g, array[h,:,25000*idx1:25000*idx2]),axis = 1)
+        g = np.concatenate((g, array[h,:,fs*idx1:fs*idx2]),axis = 1)
     return g.T
     
