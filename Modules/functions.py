@@ -98,9 +98,23 @@ def compute_density(data, mean_interspike_time, coef,
     for g in range(len(ev)):
         density[g] = np.sum(ev2[g:g+T])/T
     return density
+    
+def compute_fr_v(data, mean_interspike_time, coef):
+    ev = data
+    #ev = np.sum(data, axis=1).astype(int)
+    T = int(mean_interspike_time * coef)
 
+    cumsum = np.cumsum(np.insert(ev, 0, 0))
+    density = (cumsum[T:] - cumsum[:-T]) / T
+
+    # padding finale per mantenere stessa lunghezza
+    density = np.concatenate([density, np.zeros(T-1)])
+
+    return density
+    
 def compute_fr(data, mean_interspike_time, coef, ):
-    ev = np.array(np.sum(data, axis = 1), dtype = int)
+    #ev = np.array(np.sum(data, axis = 1), dtype = int)
+    
     density = np.zeros(ev.shape)
     T = mean_interspike_time*coef
     for g in range(len(ev)):
