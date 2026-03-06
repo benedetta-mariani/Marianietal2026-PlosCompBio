@@ -52,8 +52,8 @@ def RasterPlot(spikes, conv, ax = None):
     for l in range(spikes.shape[1]):
         x = times[idx[:,l]]
         ax.scatter(x*conv, [l for i in range(len(x))], marker ='s', c = 'black',s = 2.)
-        
-def RasterPlot2(sample2, av, fs = 500,ax = None, av_color = 'gray',
+
+def Raster_Plot_ava(sample2, av, fs = 500,ax = None, av_color = 'gray',
                nsize = 1.5, alpha = 0.3):
     """
     Parameters

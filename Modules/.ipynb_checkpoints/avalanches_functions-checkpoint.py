@@ -214,6 +214,7 @@ def delta(alpha, salpha, tau, stau):
 # ===========================================================
 # Raster plot
 # ===========================================================
+###..
 def Raster_Plot(sample, av, ax='default', color='red', alpha=0.3):
     if ax == 'default':
         fig,ax =plt.subplots(1,1)
@@ -223,7 +224,7 @@ def Raster_Plot(sample, av, ax='default', color='red', alpha=0.3):
     s = np.array(binned)>0
     for i,t in enumerate(times):
         if s[i]:
-            plt.fill_betweenx(np.arange(sample.shape[1]), t, t+av, color=color, alpha=alpha)
+            plt.fill_betweenx(np.arange(sample.shape[0]), t, t+av, color=color, alpha=alpha)
     for j in range(sample.shape[1]):
         idx = np.flatnonzero(sample[:,j]>0)
         plt.plot(idx, [j]*len(idx), '|', color='black', markersize=1.5)
