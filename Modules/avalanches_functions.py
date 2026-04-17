@@ -215,7 +215,7 @@ def delta(alpha, salpha, tau, stau):
 # Raster plot
 # ===========================================================
 ###..
-def Raster_Plot(sample, av, ax='default', color='red', alpha=0.3):
+def Raster_Plot_ava_orig(sample, av, ax='default', color='red', alpha=0.3):
     if ax == 'default':
         fig,ax =plt.subplots(1,1)
     sample = sample.reshape(sample.shape[0], -1)
